@@ -2,7 +2,7 @@
  * @Author: yangyang zheng ‘1332616027@qq.com’
  * @Date: 2023-04-11 19:08:12
  * @LastEditors: yangyang zheng ‘1332616027@qq.com’
- * @LastEditTime: 2023-04-11 19:41:53
+ * @LastEditTime: 2023-04-11 20:09:52
  * @FilePath: \cpp_code\day2.cpp
  * @Description: 今天学习trie树
  */
@@ -57,5 +57,59 @@ int main()
         else printf("%d\n", query(str));
     }
 
+    return 0;
+}
+
+/*
+最大异或和
+*/
+#include <iostream>
+#include <cstring>
+#include <algorithm>
+using namespace std;
+const int N = 1e6 + 10, M = 3100010;
+int son[M][2];
+int a[N], idx;
+
+void insert(int x)
+{
+    int p = 0;
+    for(int i = 30; ~i; i --)
+    {
+        int c = x >> i & 1;
+        if(!son[p][c])  son[p][c] = ++idx;
+        p = son[p][c];
+    }
+    
+}
+int search(int x)
+{
+    int p = 0, res = 0;
+    for(int i = 30; ~i; i --)
+    {
+        int j = x >> i & 1;
+        if(son[p][!j]){
+            res += 1 << i;
+            p = son[p][!j];
+        }else{
+            p = son[p][j];
+        }
+    }
+    return res;
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    for(int i = 0; i < n; i ++)
+    {
+        cin >> a[i];
+        insert(a[i]);
+    }
+    int res = 0;
+    for(int i = 0; i < n; i ++)
+        res = max(res, search(a[i]));
+    cout << res << endl;
     return 0;
 }
